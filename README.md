@@ -5,10 +5,10 @@ This repository contains the functions required to develop plugins for feeding t
 
 To connect to the UI, use the following steps:
 
-1. Include all of the files in the "include" folder
+1. Include all of the files in the "include" folder.
 2. Implement each of the required functions. Implement any optional functions as desired.
-3. Compile as a .dll
-4. Place the compiled .dll, as well as any necessary dependencies and configuration files into the Runtime's "Plugins" folder
+3. Compile as a .dll.
+4. Place the compiled .dll, as well as any necessary dependencies and configuration files into the Runtime's "Plugins" folder.
 5. Set the "tracking library" field in the Runtime config file to your plugin .dll path within the Runtime's "Plugins" folder.
 
 ## Required Functions
