@@ -261,4 +261,4 @@ Each joint consists of ```poition```, ```rotation```, ```velocity```, ```acceler
 
 The Infinadeck system defines the X-axis as being parallel to the treadmill X-axis the Y-axis being parallel to the treadmill Y-Axis, and the Z-axis as pointing up from the ground.
 
-<img src="https://raw.githubusercontent.com/Infinadeck/InfinadeckTrackingSDK/main/InfinadeckCoordinateSystem.png?token=AEYC66NMKPITKADVXGYKYK3BU76WU">
+<img src="https://raw.githubusercontent.com/Infinadeck/InfinadeckTrackingSDK/main/InfinadeckCoordinateSystem.png">
