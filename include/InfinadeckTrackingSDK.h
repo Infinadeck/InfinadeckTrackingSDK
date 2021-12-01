@@ -2,6 +2,7 @@
 #define INFINADECK_TRACKING_SDK_H_
 #define INFINADECK_TRACKING_EXPORT extern "C" __declspec(dllexport)   
 
+#define PATH_BUFFER_MAX_LENGTH 256
 namespace Infinadeck {
     typedef void (*SYSTEMLOG)(const char*);
     /// <summary>

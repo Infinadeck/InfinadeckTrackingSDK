@@ -28,7 +28,7 @@ The following functions must be implemented in order for the plugin to work prop
 ### Initialize
 
 ```c++
-void Initialize(void* system) {
+INFINADECK_TRACKING_EXPORT void Initialize(void* system) {
   Infinadeck::SystemInit(system);
   /*...*/
 }
@@ -41,7 +41,7 @@ Do any work here that is required for the tracking system to initialize and inte
 ### GetModuleName
 
 ```c++
-const char * GetModuleName() {
+INFINADECK_TRACKING_EXPORT const char * GetModuleName() {
   return "Example Plugin";
 }
 ```
@@ -49,7 +49,7 @@ const char * GetModuleName() {
 ### GetPublisherName
 
 ```c++
-const char * GetPublisherName() {
+INFINADECK_TRACKING_EXPORT const char * GetPublisherName() {
   return "Infinadeck";
 }
 ```
@@ -57,7 +57,7 @@ const char * GetPublisherName() {
 ### GetUserSkeleton
 
 ```c++
-Infinadeck::Skeleton GetUserSkeleton() {
+INFINADECK_TRACKING_EXPORT Infinadeck::Skeleton GetUserSkeleton() {
   Infinadeck::Skeleton user;
   user.GetJoint(SkeletonJoints::Pelvis) = {1,2,3};
   return user;
@@ -66,9 +66,10 @@ Infinadeck::Skeleton GetUserSkeleton() {
 
 This function will be called whenever the Runtime polls the position of the user. This should be as up-to-date as possible, and should be as fast as possible to reduce latency between user movement and treadmill motion.
 
+All positions and rotations should be given in Infinadeck coordinate system
 ### Finalize
 ```c++
-void Finalize() {
+INFINADECK_TRACKING_EXPORT void Finalize() {
   /*...*/
 }
 ```
@@ -77,7 +78,7 @@ This function will be called when the plugin is unloaded. After this function re
 
 ### GetTrackedPointCount
 ```c++
-int GetTrackedPointCount() {
+INFINADECK_TRACKING_EXPORT int GetTrackedPointCount() {
   const int plugin_joint_count = 3;
   return plugin_joint_count;
 }
@@ -87,7 +88,7 @@ This function should return the number of points in the user skeleton that the p
 
 ### GetTrackingLoss
 ```c++
-bool GetTrackingLoss() {
+INFINADECK_TRACKING_EXPORT bool GetTrackingLoss() {
   bool user_has_disappeared = false;
   /* 
   ...
@@ -108,10 +109,13 @@ This function should tell the Runtime if the user has lost tracking. Each tracke
 |```void Refresh()```                | Will be called once per iteration of the Runtime main loop                                          |
 |```Infinadeck::SkeletonJoints GetSmoothLocomotionReferenceJoint(Infinadeck::SmoothLocomotionReference reference)``` | Should return the identifier of the joint used for smooth locomotion reference |
 |```void SetOffset(Infinadeck::TrackingVector3 offset, Infinadeck::SkeletonJoints joint)``` | Will set the offset of the user's skeleton position      |
+|```void GetConfigFilePath(char* path_buffer)``` | Tells the runtime the plugin has config file, and where it can be found |
+|```Infinadeck::TrackingVector3 GetCenterPositionInVRSpace()``` | Should return the position of the treadmill center in VR space |
+|```Infinadeck::TrackingVector4 GetCenterRotationInVRSpace()``` | Should return the rotation of the treadmill center in VR space |
 
 ### GetPrimaryJointID
 ```c++
-Infinadeck::SkeletonJoints GetPrimaryJointID() {
+INFINADECK_TRACKING_EXPORT Infinadeck::SkeletonJoints GetPrimaryJointID() {
   return Infinadeck::SkeletonJoints::Pelvis;
 }
 ```
@@ -120,7 +124,7 @@ By default, the Runtime will take the pelvis as the user's primary joint, and wi
 
 ### CalibrateUser
 ```c++
-void CalibrateUser() {
+INFINADECK_TRACKING_EXPORT void CalibrateUser() {
     /* 
   ...
   Run user calibration sequence
@@ -132,7 +136,7 @@ Some plugins may require the user to be calibrated. For example, determining whi
 
 ### CalibrateCenter
 ```c++
-void CalibrateCenter() {
+INFINADECK_TRACKING_EXPORT void CalibrateCenter() {
     /* 
   ...
   Run center calibration system
@@ -145,7 +149,7 @@ Some plugins may require the center of the user's tracking space to be calculate
 ### Refresh
 
 ```c++
-void Refresh() {
+INFINADECK_TRACKING_EXPORT void Refresh() {
   /*...*/
 }
 ```
@@ -154,7 +158,7 @@ This function will be called once per iteration of the Runtime's main loop. Call
 
 ### GetSmoothLocomotionReferenceJoint
 ```c++
-Infinadeck::SkeletonJoints GetSmoothLocomotionReferenceJoint(Infinadeck::SmoothLocomotionReference reference) {
+INFINADECK_TRACKING_EXPORT Infinadeck::SkeletonJoints GetSmoothLocomotionReferenceJoint(Infinadeck::SmoothLocomotionReference reference) {
   switch(reference) {
     case Infinadeck::SmoothLocomotionReference::HandLeft:
       return Infinadeck::SkeletonJoints::HandLeft;
@@ -170,12 +174,53 @@ For compatibility with applications that weren't developed for the Infinadeck, t
 
 ### SetOffset
 ```c++
-void SetOffset(Infinadeck::TrackingVector3 offset, Infinadeck::SkeletonJoints joint) {
+INFINADECK_TRACKING_EXPORT void SetOffset(Infinadeck::TrackingVector3 offset, Infinadeck::SkeletonJoints joint) {
   /*...*/
 }
 ```
 
 Some systems may require the position of a joint to be offset.
+
+Offset will be given in Infinadeck coordinate system.
+### UsesConfig
+```c++
+INFINADECK_TRACKING_EXPORT void GetConfigFilePath(char* path_buffer) {
+  const char* config_path = "path_to_file\\config.json";
+  strcpy_s(path_buffer, PATH_BUFFER_MAX_LENGTH, config_path);
+}
+```
+
+Depending on how complicated your plugin is, you may require the uses of various configuration and calibration parameters, for example center position or enabling certain features. If you wish to use a plugin, use this function to notify the Runtime where to find it. To do this, copy the path including the file location relative to the base directory of the plugin plus the file name into the provided buffer, which is guaranteed to be of length ```PATH_BUFFER_MAX_LENGTH = 256```. The config file should be formatted as an INI file. For example:
+
+```ini
+# Example ini file
+[ring center]
+x=1.0
+y=-2.0
+z=0.56
+```
+
+### GetCenterPositionInVRSpace
+```c++
+INFINADECK_TRACKING_EXPORT Infinadeck::TrackingVector3 GetCenterPositionInVRSpace() {
+  return { 1.0, 2.0, 3.0 };
+}
+```
+
+Your plugin may invlolve locating the center of the treadmill within the VR tracking space. For example, if you are using SteamVR with HTC Vive Trackers, you will need to find the difference between the center of the tracking space and the center of the treadmill. Use this function to tell the Runtime the position of the center within the VR tracking space.
+
+Position should be given in Infinadeck coordinate system.
+
+### GetCenterRotationInVRSpace
+```c++
+INFINADECK_TRACKING_EXPORT Infinadeck::TrackingVector4 GetCenterPositionInVRSpace() {
+  return { 1.0, 0.0, 0.0, 0.0 };
+}
+```
+
+Your plugin may invlolve locating the center of the treadmill within the VR tracking space. For example, if you are using SteamVR with HTC Vive Trackers, you will need to know the rotation of the treadmill within the tracking space. Use this function to tell the Runtime the rotation of the center within the VR tracking space.
+
+Rotation should be given in Infinadeck coordinate system.
 
 ## Skeleton
 
@@ -211,3 +256,7 @@ Users are tracked via the ```Infinadeck::Skeleton``` object. This consists of ``
 | ```Infinadeck::SkeletonJoints::FootRight``` | ```Infinadeck::SkeletonJoints::AnkleRight``` |
 
 Each joint consists of ```poition```, ```rotation```, ```velocity```, ```acceleration```, and an optional ```name```. ```position``` and ```rotation``` should always be set for each tracked joint, while ```velociy``` and ```acceleration``` may be optionally set.
+
+## Infinadeck Coordinate System
+
+The Infinadeck system defines the X-axis as being parallel to the treadmill X-axis the Y-axis being parallel to the treadmill Y-Axis, and the Z-axis as pointing up from the ground.

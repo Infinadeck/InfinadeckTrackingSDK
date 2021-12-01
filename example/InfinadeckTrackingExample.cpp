@@ -10,6 +10,14 @@
 #define X_ROTATION 0
 #define Y_ROTATION 0
 #define Z_ROTATION 0
+#define X_CENTER_POSITION -1.1
+#define Y_CENTER_POSITION -1.2
+#define Z_CENTER_POSITION -1.3
+#define W_CENTER_ROTATION -0.71
+#define X_CENTER_ROTATION -0.48
+#define Y_CENTER_ROTATION 0.47
+#define Z_CENTER_ROTATION 0.19
+#define CONFIG_FILE_PATH "example_config.ini"
 
 static Infinadeck::Skeleton body;
 INFINADECK_TRACKING_EXPORT void Initialize(void* system) {
@@ -89,4 +97,16 @@ INFINADECK_TRACKING_EXPORT void SetOffset(Infinadeck::TrackingVector3 offset, In
 	for (int i = 0; i < 3; i++) {
 		body.GetJoint(joint).position[i] = offset[i];
 	}
+}
+
+INFINADECK_TRACKING_EXPORT void GetConfigFilePath(char* path_buffer) {
+	strcpy_s(path_buffer, PATH_BUFFER_MAX_LENGTH, CONFIG_FILE_PATH);
+}
+
+INFINADECK_TRACKING_EXPORT Infinadeck::TrackingVector3 GetCenterPositionInVRSpace() {
+	return { X_CENTER_POSITION, Y_CENTER_POSITION, Z_CENTER_POSITION };
+}
+
+INFINADECK_TRACKING_EXPORT Infinadeck::TrackingVector4 GetCenterRotationInVRSpace() {
+	return { W_CENTER_ROTATION, X_CENTER_ROTATION, Y_CENTER_ROTATION, Z_CENTER_ROTATION };
 }
