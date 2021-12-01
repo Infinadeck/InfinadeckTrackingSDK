@@ -198,7 +198,7 @@ Users are tracked via the ```Infinadeck::Skeleton``` object. This consists of ``
 | ```Infinadeck::SkeletonJoints::WristRight``` | ```Infinadeck::SkeletonJoints::ElbowRight``` |
 | ```Infinadeck::SkeletonJoints::HandRight``` | ```Infinadeck::SkeletonJoints::WristRight``` |
 | ```Infinadeck::SkeletonJoints::FingersRight``` | ```Infinadeck::SkeletonJoints::HandRight``` |
-| ```Infinadeck::SkeletonJoints::ThumbRight``` | ```Infinadeck::SkeletonJoints::HandRight``` s
+| ```Infinadeck::SkeletonJoints::ThumbRight``` | ```Infinadeck::SkeletonJoints::HandRight``` |
 | ```Infinadeck::SkeletonJoints::Neck``` | ```Infinadeck::SkeletonJoints::Chest``` |
 | ```Infinadeck::SkeletonJoints::Head``` | ```Infinadeck::SkeletonJoints::Neck``` |
 | ```Infinadeck::SkeletonJoints::HipLeft``` | ```Infinadeck::SkeletonJoints::Pelvis``` |
