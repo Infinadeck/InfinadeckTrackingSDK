@@ -1,0 +1,22 @@
+#ifndef INFINADECK_TRACKING_SDK_H_
+#define INFINADECK_TRACKING_SDK_H_
+#define INFINADECK_TRACKING_EXPORT extern "C" __declspec(dllexport)   
+
+namespace Infinadeck {
+    typedef void (*SYSTEMLOG)(const char*);
+    /// <summary>
+    /// Write a message to the runtme logger
+    /// </summary>
+    /// <param name="message">The message to be logged</param>
+    inline void (*Log)(const char* message);
+
+    /// <summary>
+    /// Should be called in order to allow the plugin to access the runtime logger
+    /// </summary>
+    /// <param name="system">The parameter provided by the Runtime caller</param>
+    inline void SystemInit(void* system) {
+        Log = (SYSTEMLOG)(system);
+    }
+
+}
+#endif
