@@ -1,13 +1,17 @@
 // Copyright 2021 Infinadeck
 #ifndef INFINADECK_SDK_TYPES_H_
 #define INFINADECK_SDK_TYPES_H_
+
+#include <string>
+#include <stdexcept>
+
 namespace Infinadeck {
 
     struct TrackingVector3 {
         double x;
         double y;
         double z;
-        double operator[](int i) const {
+        double& operator[](int i) {
             switch (i) {
             case 0:
                 return x;
@@ -16,7 +20,7 @@ namespace Infinadeck {
             case 2:
                 return z;
             default:
-                return 0;
+                throw std::invalid_argument("Index must be between 0 and 2");
             }
         }
 
@@ -34,7 +38,7 @@ namespace Infinadeck {
         double x;
         double y;
         double z;
-        double operator[](int i) {
+        double& operator[](int i) {
             switch (i) {
             case 0:
                 return w;
@@ -45,14 +49,14 @@ namespace Infinadeck {
             case 3:
                 return z;
             default:
-                return 0;
+                throw std::invalid_argument("Index must be between 0 and 3");
             }
         }
     };
 
-    enum class SmoothLocmotionReference : int {
-        LeftHand,
-        RightHand,
+    enum class SmoothLocomotionReference : int {
+        HandLeft,
+        HandRight,
         Head
     };
 
@@ -118,6 +122,8 @@ namespace Infinadeck {
         SkeletonJoints::AnkleRight // FootRight,
     };
 
+    const int SkeletonJointCount = static_cast<int>(SkeletonJoints::JointCount);
+
     /// <summary>
     /// Gives the integer index of the given joint's parent
     /// </summary>
@@ -137,16 +143,17 @@ namespace Infinadeck {
     }
 
     struct Joint {
-        TrackingVector3 position;
-        TrackingVector3 velocity;
-        TrackingVector3 acceleration;
-        TrackingVector4 orientation;
+        TrackingVector3 position = { 0 };
+        TrackingVector3 velocity = { 0 };
+        TrackingVector3 acceleration = { 0 };
+        TrackingVector4 rotation = { 1,0,0,0 };
         bool is_tracked = false;
         bool tracking_loss = false;
-        std::string joint_device_name = "";
+        static const int name_buffer_length = 32;
+        char name[name_buffer_length];
     };
 
-    struct Skeleton {
+    struct Skeleton{
         Joint joints[static_cast<int>(SkeletonJoints::JointCount)];
         inline Joint& GetJoint(SkeletonJoints joint) {
             return joints[static_cast<int>(joint)];

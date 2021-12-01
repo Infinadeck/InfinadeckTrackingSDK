@@ -102,17 +102,17 @@ This function should tell the Runtime if the user has lost tracking. Each tracke
 
 | Function                                 | Purpose                                                                                       |
 |------------------------------------------|-----------------------------------------------------------------------------------------------|
-|```SkeletonJoints GetPrimaryJointID()```         | Should return the identifier of the primary tracking joint                             |
+|```Infinadeck::SkeletonJoints GetPrimaryJointID()```         | Should return the identifier of the primary tracking joint                             |
 |```void CalibrateUser()```              | Should run a routine to calibrate the user's skeleton                                           |
 |```void CalibrateCenter()```| Should run a routine to calibrate the center of the user's tracking space                                   |
 |```void Refresh()```                | Will be called once per iteration of the Runtime main loop                                          |
-|```SkeletonJoints GetSmoothLocomotionReferenceJoint(SmoothLocomotionReference reference)``` | Should return the identifier of the joint used for smooth locomotion reference |
-|```void SetOffset(Infinadeck::TrackingVector3 offset, SkeletonJoints joint)``` | Will set the offset of the user's skeleton position      |
+|```Infinadeck::SkeletonJoints GetSmoothLocomotionReferenceJoint(Infinadeck::SmoothLocomotionReference reference)``` | Should return the identifier of the joint used for smooth locomotion reference |
+|```void SetOffset(Infinadeck::TrackingVector3 offset, Infinadeck::SkeletonJoints joint)``` | Will set the offset of the user's skeleton position      |
 
 ### GetPrimaryJointID
 ```c++
-SkeletonJoints GetPrimaryJointID() {
-  return SkeletonJoints::Pelvis;
+Infinadeck::SkeletonJoints GetPrimaryJointID() {
+  return Infinadeck::SkeletonJoints::Pelvis;
 }
 ```
 
@@ -154,14 +154,14 @@ This function will be called once per iteration of the Runtime's main loop. Call
 
 ### GetSmoothLocomotionReferenceJoint
 ```c++
-SkeletonJoints GetSmoothLocomotionReferenceJoint(SmoothLocomotionReference reference) {
+Infinadeck::SkeletonJoints GetSmoothLocomotionReferenceJoint(Infinadeck::SmoothLocomotionReference reference) {
   switch(reference) {
-    case SmoothLocomotionReference::LeftHand:
-      return SkeletonJoints::LeftHand;
-        case SmoothLocomotionReference::RightHand:
-      return SkeletonJoints::RightHand;
-        case SmoothLocomotionReference::Head:
-      return SkeletonJoints::Head;
+    case Infinadeck::SmoothLocomotionReference::HandLeft:
+      return Infinadeck::SkeletonJoints::HandLeft;
+        case Infinadeck::SmoothLocomotionReference::HandRight:
+      return Infinadeck::SkeletonJoints::HandRight;
+        case Infinadeck::SmoothLocomotionReference::Head:
+      return Infinadeck::SkeletonJoints::Head;
   }
 }
 ```
@@ -170,9 +170,44 @@ For compatibility with applications that weren't developed for the Infinadeck, t
 
 ### SetOffset
 ```c++
-void SetOffset(Infinadeck::TrackingVector3 offset, SkeletonJoints joint) {
+void SetOffset(Infinadeck::TrackingVector3 offset, Infinadeck::SkeletonJoints joint) {
   /*...*/
 }
 ```
 
 Some systems may require the position of a joint to be offset.
+
+## Skeleton
+
+Users are tracked via the ```Infinadeck::Skeleton``` object. This consists of ```Skeleton::JointCount = 27``` joints, defined as:
+| Joint       | Parent                                                            |
+|-------------|-------------------------------------------------------------------|
+| ```Infinadeck::SkeletonJoints::Pelvis``` | None |
+| ```Infinadeck::SkeletonJoints::Navel``` | ```Infinadeck::SkeletonJoints::Pelvis``` |
+| ```Infinadeck::SkeletonJoints::Chest``` | ```Infinadeck::SkeletonJoints::Navel``` |
+| ```Infinadeck::SkeletonJoints::ClavicleLeft``` | ```Infinadeck::SkeletonJoints::Chest``` |
+| ```Infinadeck::SkeletonJoints::ShoulderLeft``` | ```Infinadeck::SkeletonJoints::ClavicleLeft``` |
+| ```Infinadeck::SkeletonJoints::ElbowLeft``` | ```Infinadeck::SkeletonJoints::ShoulderLeft``` |
+| ```Infinadeck::SkeletonJoints::WristLeft``` | ```Infinadeck::SkeletonJoints::ElbowLeft``` |
+| ```Infinadeck::SkeletonJoints::HandLeft``` | ```Infinadeck::SkeletonJoints::WristLeft``` |
+| ```Infinadeck::SkeletonJoints::FingersLeft``` | ```Infinadeck::SkeletonJoints::HandLeft``` |
+| ```Infinadeck::SkeletonJoints::ThumbLeft``` | ```Infinadeck::SkeletonJoints::HandLeft``` |
+| ```Infinadeck::SkeletonJoints::ClavicleRight``` | ```Infinadeck::SkeletonJoints::Chest``` |
+| ```Infinadeck::SkeletonJoints::ShoulderRight``` | ```Infinadeck::SkeletonJoints::ClavicleRight``` |
+| ```Infinadeck::SkeletonJoints::ElbowRight``` | ```Infinadeck::SkeletonJoints::ShoulderRight``` |
+| ```Infinadeck::SkeletonJoints::WristRight``` | ```Infinadeck::SkeletonJoints::ElbowRight``` |
+| ```Infinadeck::SkeletonJoints::HandRight``` | ```Infinadeck::SkeletonJoints::WristRight``` |
+| ```Infinadeck::SkeletonJoints::FingersRight``` | ```Infinadeck::SkeletonJoints::HandRight``` |
+| ```Infinadeck::SkeletonJoints::ThumbRight``` | ```Infinadeck::SkeletonJoints::HandRight``` s
+| ```Infinadeck::SkeletonJoints::Neck``` | ```Infinadeck::SkeletonJoints::Chest``` |
+| ```Infinadeck::SkeletonJoints::Head``` | ```Infinadeck::SkeletonJoints::Neck``` |
+| ```Infinadeck::SkeletonJoints::HipLeft``` | ```Infinadeck::SkeletonJoints::Pelvis``` |
+| ```Infinadeck::SkeletonJoints::KneeLeft``` | ```Infinadeck::SkeletonJoints::HipLeft``` |
+| ```Infinadeck::SkeletonJoints::AnkleLeft``` | ```Infinadeck::SkeletonJoints::KneeLeft``` |
+| ```Infinadeck::SkeletonJoints::FootLeft``` | ```Infinadeck::SkeletonJoints::AnkleLeft``` |
+| ```Infinadeck::SkeletonJoints::HipRight``` | ```Infinadeck::SkeletonJoints::Pelvis``` |
+| ```Infinadeck::SkeletonJoints::KneeRight``` | ```Infinadeck::SkeletonJoints::HipRight``` |
+| ```Infinadeck::SkeletonJoints::AnkleRight``` | ```Infinadeck::SkeletonJoints::KneeRight``` |
+| ```Infinadeck::SkeletonJoints::FootRight``` | ```Infinadeck::SkeletonJoints::AnkleRight``` |
+
+Each joint consists of ```poition```, ```rotation```, ```velocity```, ```acceleration```, and an optional ```name```. ```position``` and ```rotation``` should always be set for each tracked joint, while ```velociy``` and ```acceleration``` may be optionally set.
