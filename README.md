@@ -182,7 +182,7 @@ INFINADECK_TRACKING_EXPORT void SetOffset(Infinadeck::TrackingVector3 offset, In
 Some systems may require the position of a joint to be offset.
 
 Offset will be given in Infinadeck coordinate system.
-### UsesConfig
+### GetConfigFilePath
 ```c++
 INFINADECK_TRACKING_EXPORT void GetConfigFilePath(char* path_buffer) {
   const char* config_path = "path_to_file\\config.json";
@@ -213,7 +213,7 @@ Position should be given in Infinadeck coordinate system.
 
 ### GetCenterRotationInVRSpace
 ```c++
-INFINADECK_TRACKING_EXPORT Infinadeck::TrackingVector4 GetCenterPositionInVRSpace() {
+INFINADECK_TRACKING_EXPORT Infinadeck::TrackingVector4 GetCenterRotationInVRSpace() {
   return { 1.0, 0.0, 0.0, 0.0 };
 }
 ```
@@ -257,6 +257,7 @@ Users are tracked via the ```Infinadeck::Skeleton``` object. This consists of ``
 
 Each joint consists of ```poition```, ```rotation```, ```velocity```, ```acceleration```, and an optional ```name```. ```position``` and ```rotation``` should always be set for each tracked joint, while ```velociy``` and ```acceleration``` may be optionally set.
 
+Any points that are being tracked should have ```is_tracked``` set to ```true```.
 ## Infinadeck Coordinate System
 
 The Infinadeck system defines the X-axis as being parallel to the treadmill X-axis the Y-axis being parallel to the treadmill Y-Axis, and the Z-axis as pointing up from the ground.

@@ -55,9 +55,9 @@ namespace Infinadeck {
     };
 
     enum class SmoothLocomotionReference : int {
+        Head,
         HandLeft,
-        HandRight,
-        Head
+        HandRight
     };
 
     enum class SkeletonJoints: int {
