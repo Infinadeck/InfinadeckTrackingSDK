@@ -190,14 +190,17 @@ INFINADECK_TRACKING_EXPORT void GetConfigFilePath(char* path_buffer) {
 }
 ```
 
-Depending on how complicated your plugin is, you may require the uses of various configuration and calibration parameters, for example center position or enabling certain features. If you wish to use a plugin, use this function to notify the Runtime where to find it. To do this, copy the path including the file location relative to the base directory of the plugin plus the file name into the provided buffer, which is guaranteed to be of length ```PATH_BUFFER_MAX_LENGTH = 256```. The config file should be formatted as an INI file. For example:
+Depending on how complicated your plugin is, you may require the uses of various configuration and calibration parameters, for example center position or enabling certain features. If you wish to use a plugin, use this function to notify the Runtime where to find it. To do this, copy the path including the file location relative to the base directory of the plugin plus the file name into the provided buffer, which is guaranteed to be of length ```PATH_BUFFER_MAX_LENGTH = 256```. The config file must be formatted as an JSON file. For example:
 
-```ini
-# Example ini file
-[ring center]
-x=1.0
-y=-2.0
-z=0.56
+```JSON
+{
+    "mode": 0,
+    "center": {
+        "x": -0.5,
+        "y": 0.25,
+        "z": 0.05
+    }
+}
 ```
 
 ### GetCenterPositionInVRSpace
