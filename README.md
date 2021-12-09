@@ -17,7 +17,7 @@ The following functions must be implemented in order for the plugin to work prop
 
 | Function                                 | Purpose                                                                            |
 |------------------------------------------|------------------------------------------------------------------------------------|
-|```void Initialize(void* system)```       | Called when the plugin is loaded. Plugin must be ready to track after this returns |
+|```bool Initialize(void* system)```       | Called when the plugin is loaded. Plugin must be ready to track after this returns. Should return true if init was successful |
 |```const char * GetModuleName()```         | Should return the name of the plugin                                              |
 |```const char * GetPublisherName()```              | Should return the name of the developer/publisher of the plugin           |
 |```Infinadeck::Skeleton GetUserSkeleton()```| Should return a skeleton corresponding to the user's position                    |
@@ -28,9 +28,10 @@ The following functions must be implemented in order for the plugin to work prop
 ### Initialize
 
 ```c++
-INFINADECK_TRACKING_EXPORT void Initialize(void* system) {
+INFINADECK_TRACKING_EXPORT bool Initialize(void* system) {
   Infinadeck::SystemInit(system);
   /*...*/
+  return true
 }
 ```
 
@@ -38,6 +39,7 @@ This function will be called once the plugin has been loaded and the Runtime has
 
 Do any work here that is required for the tracking system to initialize and interface with the Runtime. Once this function returns, the Runtime will assume that the plugin is ready, and will begin to read tracking data from it.
 
+This function should return true if initialization was successful. If your plugin determines that anything has gone wrong during this process, it should return false instead.
 ### GetModuleName
 
 ```c++

@@ -20,13 +20,14 @@
 #define CONFIG_FILE_PATH "example_config.ini"
 
 static Infinadeck::Skeleton body;
-INFINADECK_TRACKING_EXPORT void Initialize(void* system) {
+INFINADECK_TRACKING_EXPORT bool Initialize(void* system) {
 	Infinadeck::SystemInit(system);
 	for (int i = 0; i < Infinadeck::SkeletonJointCount; i++) {
 		body.joints[i].position = { X_POSITION, Y_POSITION, Z_POSITION };
 		body.joints[i].rotation = { W_ROTATION, X_ROTATION, Y_ROTATION, Z_ROTATION };
 	}
 	Infinadeck::Log("Example plugin created");
+	return true;
 }
 
 INFINADECK_TRACKING_EXPORT const char* GetModuleName() {
