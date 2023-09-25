@@ -19,5 +19,9 @@ namespace Infinadeck {
         Log = (SYSTEMLOG)(system);
     }
 
+    INFINADECK_TRACKING_EXPORT int GetVersion() {
+        return 2;
+    }
+
 }
 #endif

@@ -151,6 +151,17 @@ namespace Infinadeck {
         bool tracking_loss = false;
         static const int name_buffer_length = 32;
         char name[name_buffer_length];
+        void SetConfidence(double confidence) {
+            if (confidence < 0 || confidence >= 1.0) {
+                throw std::invalid_argument("Confidence must be between 0 and 1");
+            }
+            confidence_ = confidence;
+        }
+        double GetConfidence() const {
+            return confidence_;
+        }
+    private:
+        double confidence_ = 1.0;
     };
 
     struct Skeleton{
