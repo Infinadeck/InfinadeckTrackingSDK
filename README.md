@@ -260,9 +260,11 @@ Users are tracked via the ```Infinadeck::Skeleton``` object. This consists of ``
 | ```Infinadeck::SkeletonJoints::AnkleRight``` | ```Infinadeck::SkeletonJoints::KneeRight``` |
 | ```Infinadeck::SkeletonJoints::FootRight``` | ```Infinadeck::SkeletonJoints::AnkleRight``` |
 
-Each joint consists of ```poition```, ```rotation```, ```velocity```, ```acceleration```, and an optional ```name```. ```position``` and ```rotation``` should always be set for each tracked joint, while ```velociy``` and ```acceleration``` may be optionally set.
+Each joint consists of ```poition```, ```rotation```, ```velocity```, ```acceleration```,  and an optional ```name```. ```position``` and ```rotation``` should always be set for each tracked joint, while ```velociy``` and ```acceleration``` may be optionally set.
 
 Any points that are being tracked should have ```is_tracked``` set to ```true```.
+
+Each joint has a confidence value, by default set to ```1```. If the tracking plugin provides its own confidence values, they can be set using ```SetConfidence()``` to a value between 0 and 1, inclusive.
 ## Infinadeck Coordinate System
 
 The Infinadeck system defines the X-axis as being parallel to the treadmill X-axis the Y-axis being parallel to the treadmill Y-Axis, and the Z-axis as pointing up from the ground.

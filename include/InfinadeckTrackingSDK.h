@@ -3,6 +3,7 @@
 #define INFINADECK_TRACKING_EXPORT extern "C" __declspec(dllexport)   
 
 #define PATH_BUFFER_MAX_LENGTH 256
+#define INFINADECK_TRACKING_VERSION 2
 namespace Infinadeck {
     typedef void (*SYSTEMLOG)(const char*);
     /// <summary>
@@ -19,9 +20,10 @@ namespace Infinadeck {
         Log = (SYSTEMLOG)(system);
     }
 
-    INFINADECK_TRACKING_EXPORT int GetVersion() {
-        return 2;
+#ifndef INFINADECK_RUNTIME
+    INFINADECK_TRACKING_EXPORT int GetTrackingVersion() {
+        return INFINADECK_TRACKING_VERSION;
     }
-
+#endif
 }
 #endif
